@@ -61,4 +61,19 @@ with the plan.
 - Found that `gofmt -l` flagged every file because of CRLF line endings on
   Windows; fixed with `gofmt -w` and a `.gitattributes` that enforces LF
 
-  
+## 4. Server entrypoint
+**Prompt:** No new prompt. I confirmed `gofmt` was clean and asked to
+continue with the project.
+
+**Outcome:**
+- `cmd/server/main.go` only wires dependencies; logic lives in `internal/`
+- `PORT` from the environment with 8080 as default (needed later for Docker)
+- `http.Server` with explicit timeouts instead of `http.ListenAndServe`,
+  which has none and is exposed to slow-client attacks
+- Graceful shutdown with `signal.NotifyContext` on SIGINT/SIGTERM and a
+  10 s drain window
+- `run()` returns errors to `main()` so deferred cleanup runs before `os.Exit`
+- Request-logging middleware using `log/slog`, tested by capturing JSON
+  log output in a buffer
+- Checked every endpoint manually with curl; piped JSON through stdin
+  because PowerShell strips double quotes from native command arguments
