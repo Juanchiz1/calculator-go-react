@@ -15,6 +15,26 @@ Kept from the answer:
 - Single multi-stage Dockerfile, validated in GitHub Actions since Docker
   Desktop doesn't run on my machine
 
+## 2. Calculator domain package (TDD)
+**Prompt:** No new prompt. I shared my `go version` (1.27.2) and `node -v`
+(v24.11.0) output to confirm the environment, which was the agreed signal
+to continue with the next step of the plan.
+
+**Outcome:**
+- Wrote `calculator_test.go` first and confirmed it failed to compile
+  before writing the implementation
+- Table-driven tests with `t.Run` subtests and a `t.Helper()` assertion
+  helper; floats compared with an epsilon instead of `==`
+- Sentinel errors (`ErrDivisionByZero`, `ErrNegativeSqrt`,
+  `ErrNonFiniteResult`) checked with `errors.Is`, so the HTTP layer can map
+  them to status codes without comparing strings
+- Every operation returns `(float64, error)`, including `Add`, because
+  overflow to `+Inf` is possible; the uniform signature also lets the API
+  look operations up in a map
+- A `finite()` guard rejects Inf/NaN results (overflow, `0^-1`,
+  `(-8)^0.5`), which JSON can't encode anyway
+- Assumption: percentage means "a percent of b" (`a * b / 100`)
+- Result: 100.0% coverage, `go vet` and `gofmt -l` clean
 
 
-  
+
