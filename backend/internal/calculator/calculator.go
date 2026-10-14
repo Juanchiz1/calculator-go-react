@@ -1,4 +1,3 @@
-
 // Package calculator implements the arithmetic operations exposed by the API.
 // It has no knowledge of HTTP or JSON, which keeps it easy to test in isolation.
 package calculator

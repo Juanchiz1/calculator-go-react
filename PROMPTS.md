@@ -38,3 +38,27 @@ to continue with the next step of the plan.
 
 
 
+## 3. HTTP layer
+**Prompt:** No new prompt. I shared the step 2 coverage output to continue
+with the plan.
+
+**Outcome:**
+- Four small files in `internal/api`: router, handlers, request decoding,
+  and error mapping
+- One generic handler for every operation: a map from the `{op}` path
+  segment to an `operation{operands, apply}`; `sqrt` is wrapped to fit the
+  binary signature and `operands` drives validation
+- Request decoding rejects empty bodies, malformed JSON, non-numeric
+  operands, unknown fields, trailing data, and bodies over 1 KB (413)
+- Pointer operands so a missing or `null` field returns `MISSING_OPERAND`
+  instead of being treated as zero
+- Domain errors mapped with `errors.Is` to 422; error codes are stable
+  constants meant for clients to branch on
+- Tests use `httptest` against the real router and check status,
+  Content-Type, error code, and result
+- Result: 93.8% coverage on `api`; the uncovered lines are defensive
+  branches (unknown domain error, failed response write)
+- Found that `gofmt -l` flagged every file because of CRLF line endings on
+  Windows; fixed with `gofmt -w` and a `.gitattributes` that enforces LF
+
+  
