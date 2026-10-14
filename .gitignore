@@ -1,0 +1,15 @@
+# Node
+node_modules/
+frontend/dist/
+frontend/coverage/
+
+# Go
+backend/coverage.out
+backend/coverage.html
+*.exe
+backend/bin/
+
+# Entorno / editor
+.env
+.vscode/
+.DS_Store
