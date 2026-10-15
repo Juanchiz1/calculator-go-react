@@ -1,0 +1,32 @@
+.result {
+  display: grid;
+  align-content: center;
+  gap: 0.25rem;
+  min-height: 6rem;
+  padding: 1rem;
+  background: var(--color-inset);
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+
+.result__placeholder {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.result__expression {
+  margin: 0;
+  font: 0.95rem var(--font-mono);
+  color: var(--color-muted);
+}
+
+.result__value {
+  display: block;
+  font: 600 2rem/1.2 var(--font-mono);
+}
+
+.result__error {
+  margin: 0;
+  font-weight: 500;
+  color: var(--color-danger);
+}
