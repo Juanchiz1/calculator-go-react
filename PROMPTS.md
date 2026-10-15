@@ -77,3 +77,19 @@ continue with the project.
   log output in a buffer
 - Checked every endpoint manually with curl; piped JSON through stdin
   because PowerShell strips double quotes from native command arguments
+
+## 5. Frontend scaffold and API client
+**Prompt:** No new prompt. I shared the manual curl results and asked to
+continue with the next stage.
+
+**Outcome:**
+- Vite + React + TypeScript, with Vitest, React Testing Library and v8 coverage
+- Vite dev proxy for `/api` and `/health`, so the backend needs no CORS setup
+- Typed API client: a discriminated union makes `b` required for binary
+  operations and forbidden for `sqrt` at compile time
+- Response bodies treated as `unknown` and checked with type guards instead
+  of casts; backend errors become a typed `ApiError` with a stable `code`
+- Handles network failures, non-JSON error bodies (Go's plain-text 405) and
+  unknown error codes
+- Tests stub `fetch` with `vi.stubGlobal`; no real network calls
+- Result: XX% coverage on `src/api`  
