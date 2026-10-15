@@ -98,7 +98,7 @@ continue with the next stage.
 - Handles network failures, non-JSON error bodies (Go's plain-text 405) and
   unknown error codes
 - Tests stub `fetch` with `vi.stubGlobal`; no real network calls
-- Result: XX% coverage on `src/api`
+- Result: 100% coverage on `src/api`
 
 ## 6. UI logic (validation, formatting, error messages)
 **Prompt:** No new prompt. I shared the frontend coverage output and asked
@@ -115,7 +115,7 @@ to continue.
 - Stable backend error codes mapped to user-facing messages in one place
 - Operation metadata typed as `Record<Operation, ...>`, so a new operation
   won't compile until it has labels
-- Result: XX% coverage on `src/lib`
+- Result: 100% coverage on `src/lib`
 
 
 ## 7. Calculator UI
@@ -178,7 +178,7 @@ continue.
 - Coverage thresholds at 90% so `npm run coverage` fails on regressions
 - Also caught by tests: changing an error message in `validation.ts`
   without updating its test failed two cases, as it should
-- Result: XX% overall frontend coverage
+- Result: 100% overall frontend coverage
 
 ## 10. Docker and CI
 **Prompt:** No new prompt. I shared the frontend coverage output and asked
