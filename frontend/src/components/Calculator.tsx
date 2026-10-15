@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { isUnaryOperation } from '../api/calculator'
 import { useCalculator } from '../hooks/useCalculator'
 import { OPERATION_INFO } from '../lib/operations'
@@ -7,11 +8,17 @@ import { ResultPanel } from './ResultPanel'
 import './Calculator.css'
 
 export function Calculator() {
-  const { operation, values, fieldErrors, outcome, updateField, selectOperation, submit } =
+  const { operation, values, fieldErrors, outcome, updateField, selectOperation, submit, reset } =
     useCalculator()
+  const firstInputRef = useRef<HTMLInputElement>(null)
 
   const info = OPERATION_INFO[operation]
   const isLoading = outcome.status === 'loading'
+
+  function handleClear() {
+    reset()
+    firstInputRef.current?.focus()
+  }
 
   return (
     <form
@@ -22,6 +29,7 @@ export function Calculator() {
       }}
     >
       <OperandField
+        ref={firstInputRef}
         id="operand-a"
         label={info.labelA}
         value={values.a}
@@ -41,9 +49,19 @@ export function Calculator() {
         />
       )}
 
-      <button type="submit" className="calculator__submit" disabled={isLoading}>
-        {isLoading ? 'Calculating…' : 'Calculate'}
-      </button>
+      <div className="calculator__actions">
+        <button
+          type="button"
+          className="calculator__clear"
+          onClick={handleClear}
+          disabled={isLoading}
+        >
+          Clear
+        </button>
+        <button type="submit" className="calculator__submit" disabled={isLoading}>
+          {isLoading ? 'Calculating…' : 'Calculate'}
+        </button>
+      </div>
 
       <ResultPanel outcome={outcome} />
     </form>

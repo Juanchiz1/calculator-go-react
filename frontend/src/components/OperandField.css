@@ -29,6 +29,7 @@
 }
 
 .field__error {
+  min-height: 1.3125rem; /* one line: 0.875rem font × 1.5 line-height */
   margin: 0;
   font-size: 0.875rem;
   color: var(--color-danger);

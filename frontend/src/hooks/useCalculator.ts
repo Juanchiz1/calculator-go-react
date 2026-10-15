@@ -28,6 +28,12 @@ export function useCalculator() {
     setFieldErrors({})
   }
 
+  function reset() {
+    setValues({ a: '', b: '' })
+    setFieldErrors({})
+    setOutcome({ status: 'idle' })
+  }
+
   async function submit() {
     const validation = validateForm(operation, values.a, values.b)
     if (!validation.ok) {
@@ -50,5 +56,5 @@ export function useCalculator() {
     }
   }
 
-  return { operation, values, fieldErrors, outcome, updateField, selectOperation, submit }
+  return { operation, values, fieldErrors, outcome, updateField, selectOperation, submit, reset }
 }

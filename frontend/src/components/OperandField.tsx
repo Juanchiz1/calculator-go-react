@@ -1,3 +1,4 @@
+import type { Ref } from 'react'
 import './OperandField.css'
 
 interface OperandFieldProps {
@@ -6,9 +7,10 @@ interface OperandFieldProps {
   value: string
   error?: string
   onChange: (value: string) => void
+  ref?: Ref<HTMLInputElement>
 }
 
-export function OperandField({ id, label, value, error, onChange }: OperandFieldProps) {
+export function OperandField({ id, label, value, error, onChange, ref }: OperandFieldProps) {
   const errorId = `${id}-error`
 
   return (
@@ -17,6 +19,7 @@ export function OperandField({ id, label, value, error, onChange }: OperandField
         {label}
       </label>
       <input
+        ref={ref}
         id={id}
         className="field__input"
         type="text"
@@ -27,11 +30,9 @@ export function OperandField({ id, label, value, error, onChange }: OperandField
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
       />
-      {error && (
-        <p id={errorId} className="field__error" role="alert">
-          {error}
-        </p>
-      )}
+      <p id={errorId} className="field__error" role="alert">
+        {error}
+      </p>
     </div>
   )
 }

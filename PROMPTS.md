@@ -110,3 +110,43 @@ to continue.
 - Operation metadata typed as `Record<Operation, ...>`, so a new operation
   won't compile until it has labels
 - Result: XX% coverage on `src/lib`
+
+
+## 7. Calculator UI
+**Prompt:** No new prompt. I shared the step 6 coverage output and asked to
+continue.
+
+**Outcome:**
+- `useCalculator` hook holds state; the result is a discriminated union
+  (`idle | loading | success | error`) so impossible states can't exist
+- Inputs keep raw strings and are only parsed on submit, so partial input
+  like `-` or `1.` is allowed while typing
+- `type="text"` instead of `type="number"`, which returns `""` for invalid
+  input and gives no way to explain what is wrong; no `inputMode="decimal"`
+  because the iOS decimal keypad has no minus key
+- Operations are native radio inputs styled as buttons: arrow-key
+  navigation and screen reader support for free
+- `aria-invalid`, `aria-describedby` and an `aria-live` result region
+- CSS custom properties with automatic dark mode; 48 px touch targets;
+  layout checked at 375 px
+- Found while testing: with the backend down, the Vite dev proxy answers
+  500, so the UI shows the generic error instead of the network error
+
+
+## 8. UX fixes after manual testing
+**Prompt** (originally in Spanish, translated):
+> Everything works, but the interface sometimes doesn't feel very friendly.
+> It's missing a button to clear everything I typed, and the calculator
+> changes size when error messages appear.
+
+**Outcome:**
+- Found two causes for the layout shift: error paragraphs were mounted and
+  unmounted, and the card was vertically centered, so any height change
+  moved its top edge too
+- Error lines are now always rendered with a reserved height (also a more
+  reliable `role="alert"` live region); the card is anchored to the top
+- Shortened the comma error so it fits on one line at 375 px
+- Added a secondary Clear button (`type="button"`, disabled while loading
+  to avoid a stale response refilling the result) that returns focus to
+  the first field, using React 19's `ref` as a regular prop
+- Fixed the `xʸ` symbol spacing caused by the monospace font  

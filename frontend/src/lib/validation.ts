@@ -19,7 +19,7 @@ export function parseOperand(raw: string): ParsedOperand {
     return { ok: false, error: 'Enter a number.' }
   }
   if (value.includes(',')) {
-    return { ok: false, error: 'Use a dot for decimals, without thousands separators.' }
+    return { ok: false, error: 'Use a dot for decimals, no commas.' }
   }
   if (!NUMBER_PATTERN.test(value)) {
     return { ok: false, error: 'Enter a valid number.' }
