@@ -150,3 +150,26 @@ continue.
   to avoid a stale response refilling the result) that returns focus to
   the first field, using React 19's `ref` as a regular prop
 - Fixed the `xʸ` symbol spacing caused by the monospace font  
+
+
+## 9. Component tests
+**Prompt** (originally in Spanish, translated):
+> Done. Next time don't forget to give me the commands to run the backend
+> and the frontend. Let's continue with the project.
+
+**Outcome:**
+- `Calculator` tested as a whole through `userEvent`, with only `fetch`
+  stubbed, so tests exercise the hook, validation, formatting and API
+  client together and survive internal refactors
+- Queries by role and label (`getByRole('radio', { name: 'Divide' })`),
+  which doubles as an accessibility check; `toHaveAccessibleDescription`
+  verifies the `aria-describedby` wiring
+- Covered: happy path, Enter-key submit, field errors without an API call,
+  error clearing on input, API error messages, sqrt with one operand,
+  buttons disabled during a pending request (manually resolved promise),
+  and Clear restoring focus
+- Shared `jsonResponse` test helper in `src/test/`
+- Coverage thresholds at 90% so `npm run coverage` fails on regressions
+- Also caught by tests: changing an error message in `validation.ts`
+  without updating its test failed two cases, as it should
+- Result: XX% overall frontend coverage

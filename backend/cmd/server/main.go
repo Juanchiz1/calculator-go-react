@@ -30,7 +30,7 @@ func run(logger *slog.Logger) error {
 
 	srv := &http.Server{
 		Addr:              ":" + port,
-		Handler:           api.LogRequests(logger, api.NewRouter()),
+		Handler:           api.LogRequests(logger, api.NewRouter(os.Getenv("STATIC_DIR"))),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      10 * time.Second,

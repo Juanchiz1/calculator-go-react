@@ -25,9 +25,15 @@ var operations = map[string]operation{
 }
 
 // NewRouter returns the HTTP handler with all API routes registered.
-func NewRouter() http.Handler {
+// When staticDir is not empty, it also serves the built frontend from it.
+func NewRouter(staticDir string) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", handleHealth)
 	mux.HandleFunc("POST /api/v1/{op}", handleCalculate)
+
+	if staticDir != "" {
+		mux.Handle("GET /", http.FileServer(http.Dir(staticDir)))
+	}
+
 	return mux
 }

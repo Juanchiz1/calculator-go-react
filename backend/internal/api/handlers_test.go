@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
 
 func TestCalculate(t *testing.T) {
-	router := NewRouter()
+	router := NewRouter("")
 
 	tests := []struct {
 		name       string
@@ -76,14 +78,14 @@ func TestCalculate(t *testing.T) {
 }
 
 func TestHealth(t *testing.T) {
-	rec := doRequest(t, NewRouter(), http.MethodGet, "/health", "")
+	rec := doRequest(t, NewRouter(""), http.MethodGet, "/health", "")
 	if rec.Code != http.StatusOK {
 		t.Fatalf("status = %d, want %d", rec.Code, http.StatusOK)
 	}
 }
 
 func TestMethodNotAllowed(t *testing.T) {
-	rec := doRequest(t, NewRouter(), http.MethodGet, "/api/v1/add", "")
+	rec := doRequest(t, NewRouter(""), http.MethodGet, "/api/v1/add", "")
 	if rec.Code != http.StatusMethodNotAllowed {
 		t.Fatalf("status = %d, want %d", rec.Code, http.StatusMethodNotAllowed)
 	}
@@ -102,5 +104,27 @@ func decodeBody(t *testing.T, rec *httptest.ResponseRecorder, dst any) {
 	t.Helper()
 	if err := json.NewDecoder(rec.Body).Decode(dst); err != nil {
 		t.Fatalf("decoding response: %v (body: %s)", err, rec.Body)
+	}
+}
+
+func TestServesStaticFilesAlongsideAPI(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte("<h1>calculator</h1>"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	router := NewRouter(dir)
+
+	rec := doRequest(t, router, http.MethodGet, "/", "")
+	if rec.Code != http.StatusOK {
+		t.Fatalf("GET / status = %d, want %d", rec.Code, http.StatusOK)
+	}
+	if !strings.Contains(rec.Body.String(), "<h1>calculator</h1>") {
+		t.Errorf("GET / did not serve index.html, got: %s", rec.Body)
+	}
+
+	rec = doRequest(t, router, http.MethodPost, "/api/v1/add", `{"a": 1, "b": 2}`)
+	if rec.Code != http.StatusOK {
+		t.Errorf("API route status = %d, want %d", rec.Code, http.StatusOK)
 	}
 }
