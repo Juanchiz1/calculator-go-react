@@ -92,4 +92,21 @@ continue with the next stage.
 - Handles network failures, non-JSON error bodies (Go's plain-text 405) and
   unknown error codes
 - Tests stub `fetch` with `vi.stubGlobal`; no real network calls
-- Result: XX% coverage on `src/api`  
+- Result: XX% coverage on `src/api`
+
+## 6. UI logic (validation, formatting, error messages)
+**Prompt:** No new prompt. I shared the frontend coverage output and asked
+to continue.
+
+**Outcome:**
+- Split responsibilities: the client validates number format, the backend
+  validates the math (division by zero is left to the API on purpose, so
+  domain rules live in one place)
+- Strict number parsing with a regex, because `Number()` accepts `""`,
+  `"0x10"` and `"Infinity"`; a specific message for comma decimals
+- Results rounded to 15 significant digits for display, so `0.1 + 0.2`
+  shows `0.3`; the API still returns the raw float64
+- Stable backend error codes mapped to user-facing messages in one place
+- Operation metadata typed as `Record<Operation, ...>`, so a new operation
+  won't compile until it has labels
+- Result: XX% coverage on `src/lib`

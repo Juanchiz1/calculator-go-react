@@ -66,4 +66,10 @@ describe('validateForm', () => {
       errors: { a: 'Enter a valid number.' },
     })
   })
+    it('reports only the first operand when the second is valid', () => {
+    expect(validateForm('add', 'abc', '4')).toEqual({
+      ok: false,
+      errors: { a: 'Enter a valid number.' },
+    })
+  })
 })
