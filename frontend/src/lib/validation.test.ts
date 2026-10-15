@@ -23,8 +23,8 @@ describe('parseOperand', () => {
     ['0x10', 'Enter a valid number.'],
     ['Infinity', 'Enter a valid number.'],
     ['-', 'Enter a valid number.'],
-    ['1,5', 'Use a dot for decimals, without thousands separators.'],
-    ['1,000', 'Use a dot for decimals, without thousands separators.'],
+    ['1,5', 'Use a dot for decimals, no commas.'],
+    ['1,000', 'Use a dot for decimals, no commas.'],
     ['1e999', 'This number is too large.'],
   ])('rejects %j', (raw, message) => {
     expect(parseOperand(raw)).toEqual({ ok: false, error: message })

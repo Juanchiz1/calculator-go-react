@@ -23,6 +23,12 @@ export default defineConfig({
         'src/**/*.test.{ts,tsx}',
       ],
       reporter: ['text', 'html'],
+      thresholds: {
+        lines: 90,
+        branches: 90,
+        functions: 90,
+        statements: 90,
+      },
     },
   },
 })

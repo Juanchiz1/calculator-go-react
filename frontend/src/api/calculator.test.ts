@@ -1,12 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError, calculate, isUnaryOperation } from './calculator'
+import { jsonResponse } from '../test/http'
 
-function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
-  })
-}
 
 async function captureError(promise: Promise<unknown>): Promise<unknown> {
   return promise.then(
