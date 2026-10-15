@@ -173,3 +173,22 @@ continue.
 - Also caught by tests: changing an error message in `validation.ts`
   without updating its test failed two cases, as it should
 - Result: XX% overall frontend coverage
+
+## 10. Docker and CI
+**Prompt:** No new prompt. I shared the frontend coverage output and asked
+to continue.
+
+**Outcome:**
+- The Go server optionally serves the built frontend (`STATIC_DIR`), so
+  production is one process, one port and no CORS; tested with a temp dir
+- Verified production mode locally without Docker by pointing `STATIC_DIR`
+  at `frontend/dist`
+- Multi-stage Dockerfile: Node and Go only at build time; runtime is a
+  static binary (`CGO_ENABLED=0`) plus assets on distroless, as non-root
+- `.dockerignore` keeps the Windows `node_modules` out of the Linux build
+- GitHub Actions: Go (gofmt check, vet, tests with `-race`) and frontend
+  (lint, coverage with thresholds, build) in parallel, then a Docker job
+  that builds the image and smoke-tests the running container
+- Coverage reports uploaded as CI artifacts
+- Docker Desktop doesn't run on my machine, so CI is where the image is
+  built and verified
